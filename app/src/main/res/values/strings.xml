@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">MyWorkNote</string>
+    <string name="add_note">Добовление новой заметки</string>
+</resources>
