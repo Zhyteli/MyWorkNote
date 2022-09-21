@@ -1,27 +1,38 @@
 package com.zhytel.myworknote.data
 
+import android.app.Application
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.zhytel.myworknote.domain.NoteRepository
 import com.zhytel.myworknote.domain.entity.Note
 
-class NoteRepositoryImpl: NoteRepository {
+class NoteRepositoryImpl(
+    application: Application
+) : NoteRepository {
+
+    private val noteDao = AppDatabase.getInstance(application).noteDao()
+    private val mapper = NoteMapper()
+
     override fun addNote(note: Note) {
-        TODO("Not yet implemented")
+        noteDao.addNote(mapper.mapEntityToDbModel(note))
     }
 
     override fun deleteNote(note: Note) {
-        TODO("Not yet implemented")
+        noteDao.deleteNote(note.id)
     }
 
     override fun editNote(note: Note) {
-        TODO("Not yet implemented")
+        noteDao.addNote(mapper.mapEntityToDbModel(note))
     }
 
     override fun getNote(noteId: Int): Note {
-        TODO("Not yet implemented")
+        val dbModel = noteDao.getNote(noteId)
+        return mapper.mapDbModelToEntity(dbModel)
     }
 
-    override fun getNoteList(): LiveData<List<Note>> {
-        TODO("Not yet implemented")
+    override fun getNoteList(): LiveData<List<Note>> = Transformations.map(
+        noteDao.getNoteList()
+    ){
+        mapper.mapListDbModelToEntity(it)
     }
 }

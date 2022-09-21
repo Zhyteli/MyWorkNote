@@ -6,6 +6,8 @@ import androidx.room.RoomDatabase
 
 abstract class AppDatabase: RoomDatabase() {
 
+    abstract fun noteDao():NoteDao
+
     companion object {
         private var INSTANCE: AppDatabase? = null
         private val LOCK = Any()
