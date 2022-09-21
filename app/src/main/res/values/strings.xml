@@ -3,4 +3,7 @@
     <string name="add_note">Добовление новой заметки</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="st_description">Описание</string>
+    <string name="Заголовок">Title</string>
+    <string name="tx_save">save</string>
 </resources>

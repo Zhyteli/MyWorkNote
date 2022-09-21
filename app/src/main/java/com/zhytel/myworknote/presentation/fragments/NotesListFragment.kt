@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.zhytel.myworknote.R
 import com.zhytel.myworknote.databinding.FragmentNotesListBinding
 import com.zhytel.myworknote.presentation.NotesListViewModel
 import com.zhytel.myworknote.presentation.adapters.NoteListAdapter
@@ -83,21 +85,16 @@ class NotesListFragment : Fragment() {
     }
     private fun setupClickListener() {
         noteAdapter.onNodeClickListener = {
-
+            launchFragment(it.id)
         }
         binding.buttonAddShopItem.setOnClickListener {
             viewModel.addNote()
         }
     }
-
-    companion object {
-
-        fun newInstance(param1: String, param2: String) =
-            NotesListFragment().apply {
-                arguments = Bundle().apply {
-
-                }
-            }
+    private fun launchFragment(noteId:Int) {
+        findNavController().navigate(
+            NotesListFragmentDirections.actionNotesListFragmentToDetailFragment(noteId)
+        )
     }
     override fun onDestroy() {
         super.onDestroy()
