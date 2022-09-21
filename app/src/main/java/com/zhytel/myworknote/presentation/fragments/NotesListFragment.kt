@@ -1,18 +1,21 @@
 package com.zhytel.myworknote.presentation.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.zhytel.myworknote.R
 import com.zhytel.myworknote.databinding.FragmentNotesListBinding
 import com.zhytel.myworknote.presentation.NotesListViewModel
 import com.zhytel.myworknote.presentation.adapters.NoteListAdapter
+import kotlinx.coroutines.delay
+
 
 class NotesListFragment : Fragment() {
 
@@ -21,19 +24,13 @@ class NotesListFragment : Fragment() {
 
     private var _binding: FragmentNotesListBinding? = null
     private val binding: FragmentNotesListBinding
-    get() = _binding ?: throw RuntimeException("FragmentNotesListBinding == null")
+        get() = _binding ?: throw RuntimeException("FragmentNotesListBinding == null")
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-
-        }
-    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentNotesListBinding.inflate(inflater, container,false)
+        _binding = FragmentNotesListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -42,10 +39,29 @@ class NotesListFragment : Fragment() {
         setupRecyclerView()
 
         viewModel = ViewModelProvider(this)[NotesListViewModel::class.java]
-        viewModel.noteList.observe(viewLifecycleOwner){
+        viewModel.noteList.observe(viewLifecycleOwner) {
             noteAdapter.submitList(it)
         }
+//        binding.progressServer.isVisible = false
+        val oneMin = 1000 // 1 minute in milli seconds
+        object : CountDownTimer(
+            oneMin.toLong(), 100
+        ) {
+            override fun onTick(millisUntilFinished: Long) {
+
+                //forward progress
+                val finishedSeconds = oneMin - millisUntilFinished
+                val total = (finishedSeconds.toFloat() / oneMin.toFloat() * 50.0).toInt()
+                binding.progressServer.progress = total
+
+            }
+
+            override fun onFinish() {
+                        binding.progressServer.isVisible = false
+            }
+        }.start()
     }
+
 
     private fun setupRecyclerView() {
         with(binding.rvNotesList) {
@@ -63,6 +79,7 @@ class NotesListFragment : Fragment() {
         setupClickListener()
         setupSwipeListener(binding.rvNotesList)
     }
+
     private fun setupSwipeListener(rvShopList: RecyclerView) {
         val callback = object : ItemTouchHelper.SimpleCallback(
             0,
@@ -75,6 +92,7 @@ class NotesListFragment : Fragment() {
             ): Boolean {
                 return false
             }
+
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val item = noteAdapter.currentList[viewHolder.adapterPosition]
                 viewModel.deleteNote(item)
@@ -83,6 +101,7 @@ class NotesListFragment : Fragment() {
         val itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(rvShopList)
     }
+
     private fun setupClickListener() {
         noteAdapter.onNodeClickListener = {
             launchFragment(it.id)
@@ -91,11 +110,13 @@ class NotesListFragment : Fragment() {
             viewModel.addNote()
         }
     }
-    private fun launchFragment(noteId:Int) {
+
+    private fun launchFragment(noteId: Int) {
         findNavController().navigate(
             NotesListFragmentDirections.actionNotesListFragmentToDetailFragment(noteId)
         )
     }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null

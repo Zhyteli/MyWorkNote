@@ -18,7 +18,7 @@
         android:id="@+id/detailFragment"
         android:name="com.zhytel.myworknote.presentation.fragments.DetailFragment"
         android:label="fragment_deteil"
-        tools:layout="@layout/fragment_deteil" >
+        tools:layout="@layout/fragment_detail" >
         <argument
             android:name="id"
             app:argType="integer" />

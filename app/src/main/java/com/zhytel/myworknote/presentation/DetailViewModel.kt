@@ -2,6 +2,7 @@ package com.zhytel.myworknote.presentation
 
 import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.zhytel.myworknote.data.NoteRepositoryImpl
 import com.zhytel.myworknote.domain.*
 import com.zhytel.myworknote.domain.entity.Note
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -43,10 +45,14 @@ class DetailViewModel(
             viewModelScope.launch {
                 val item = it.copy(title = title, description = description, time = currentTime)
                 Log.d("MMM", item.title)
+                delay(5000)
                 editNoteUseCase(item)
+                Toast.makeText(getApplication(), "Сохранено", Toast.LENGTH_LONG).show()
             }
         }
     }
+
+
 
     private fun parseInput(inputName: String?): String {
         return inputName?.trim() ?: ""
