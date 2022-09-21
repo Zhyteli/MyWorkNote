@@ -13,19 +13,19 @@ class NoteRepositoryImpl(
     private val noteDao = AppDatabase.getInstance(application).noteDao()
     private val mapper = NoteMapper()
 
-    override fun addNote(note: Note) {
+    override suspend fun addNote(note: Note) {
         noteDao.addNote(mapper.mapEntityToDbModel(note))
     }
 
-    override fun deleteNote(note: Note) {
+    override suspend fun deleteNote(note: Note) {
         noteDao.deleteNote(note.id)
     }
 
-    override fun editNote(note: Note) {
+    override suspend fun editNote(note: Note) {
         noteDao.addNote(mapper.mapEntityToDbModel(note))
     }
 
-    override fun getNote(noteId: Int): Note {
+    override suspend fun getNote(noteId: Int): Note {
         val dbModel = noteDao.getNote(noteId)
         return mapper.mapDbModelToEntity(dbModel)
     }

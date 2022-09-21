@@ -9,13 +9,13 @@ import androidx.room.Query
 @Dao
 interface NoteDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addNote(noteDbModel: NoteDbModel)
+    suspend fun addNote(noteDbModel: NoteDbModel)
 
     @Query("DELETE FROM note_items WHERE id=:noteId")
-    fun deleteNote(noteId: Int)
+    suspend fun deleteNote(noteId: Int)
 
     @Query("SELECT * FROM note_items WHERE id=:shopItemId LIMIT 1")
-    fun getNote(shopItemId: Int): NoteDbModel
+    suspend fun getNote(shopItemId: Int): NoteDbModel
 
     @Query("SELECT * FROM note_items")
     fun getNoteList(): LiveData<List<NoteDbModel>>
