@@ -21,6 +21,7 @@ class NotesListViewModel(
     application: Application
 ) : AndroidViewModel(application) {
 
+    //work through the repository
     private val repository = NoteRepositoryImpl(application)
 
     private val getNoteListUseCase = GetNoteListUseCase(repository)
@@ -28,6 +29,7 @@ class NotesListViewModel(
     private val addNoteUseCase = AddNoteUseCase(repository)
     private val updateTimeUseCase = UpdateTimeUseCase(repository)
 
+    //getting data from a sheet
     val noteList = getNoteListUseCase()
 
     fun deleteNote(note: Note){
@@ -36,6 +38,7 @@ class NotesListViewModel(
         }
     }
 
+    // add note
     fun addNote(){
         viewModelScope.launch {
             val currentTime: String = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
@@ -51,6 +54,7 @@ class NotesListViewModel(
         }
     }
 
+    //update time after 00:00
     fun updateTimeInNote(note: Note){
         viewModelScope.launch {
             val current: String = SimpleDateFormat("dd", Locale.getDefault()).format(Date())
