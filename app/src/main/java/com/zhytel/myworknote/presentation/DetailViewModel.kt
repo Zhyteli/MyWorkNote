@@ -16,11 +16,11 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class DetailViewModel(
     application: Application
 ) : AndroidViewModel(application) {
 
+    //work through the repository
     private val repository = NoteRepositoryImpl(application)
 
     private val getNoteUseCase = GetNoteUseCase(repository)
@@ -30,13 +30,14 @@ class DetailViewModel(
     val noteItem: LiveData<Note>
         get() = _noteItem
 
+    //getting a note
     fun getShopItem(noteId: Int) {
         viewModelScope.launch {
             val item = getNoteUseCase(noteId)
             _noteItem.value = item
         }
     }
-
+    //time change
     fun editShopItem(inputTitle: String?, inputDescription: String?) {
         val title = parseInput(inputTitle)
         val description = parseInput(inputDescription)
@@ -50,9 +51,7 @@ class DetailViewModel(
             }
         }
     }
-
-
-
+    //checking input for emptiness
     private fun parseInput(inputName: String?): String {
         return inputName?.trim() ?: ""
     }

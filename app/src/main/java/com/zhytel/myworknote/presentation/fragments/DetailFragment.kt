@@ -12,10 +12,12 @@ import com.zhytel.myworknote.presentation.DetailViewModel
 
 
 class DetailFragment : Fragment() {
+    //getting id via navigation
     private val args by navArgs<DetailFragmentArgs>()
 
     private lateinit var viewModel: DetailViewModel
 
+    //creating a binding and checking it for null
     private var _binding: FragmentDetailBinding? = null
     private val binding: FragmentDetailBinding
         get() = _binding ?: throw RuntimeException("FragmentDetailBinding == null")
@@ -33,16 +35,7 @@ class DetailFragment : Fragment() {
         viewModel = ViewModelProvider(this)[DetailViewModel::class.java]
         launchEditMode()
     }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setHasOptionsMenu(true)
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        return inflater.inflate(R.menu.menu_detail, menu)
-    }
-
+    //get data by id
     private fun launchEditMode() {
         viewModel.getShopItem(args.id)
         viewModel.noteItem.observe(viewLifecycleOwner) {
@@ -51,6 +44,14 @@ class DetailFragment : Fragment() {
         }
     }
 
+    //Save changed data menu
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setHasOptionsMenu(true)
+        super.onCreate(savedInstanceState)
+    }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        return inflater.inflate(R.menu.menu_detail, menu)
+    }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.mn_save) {
             viewModel.getShopItem(args.id)

@@ -1,6 +1,5 @@
 package com.zhytel.myworknote.presentation.fragments
 
-import android.animation.ObjectAnimator
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
@@ -8,7 +7,6 @@ import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -27,6 +25,7 @@ class NotesListFragment : Fragment() {
     private lateinit var viewModel: NotesListViewModel
     private lateinit var noteAdapter: NoteListAdapter
 
+    //Creating a binding and checking it for null
     private var _binding: FragmentNotesListBinding? = null
     private val binding: FragmentNotesListBinding
         get() = _binding ?: throw RuntimeException("FragmentNotesListBinding == null")
@@ -47,7 +46,6 @@ class NotesListFragment : Fragment() {
         viewModel.noteList.observe(viewLifecycleOwner) {
             checkingData(it)
         }
-
     }
 
     private fun checkingData(note: List<Note>) {
@@ -102,7 +100,7 @@ class NotesListFragment : Fragment() {
         }.start()
     }
 
-
+    //restrict re-creation of elements
     private fun setupRecyclerView() {
         with(binding.rvNotesList) {
             noteAdapter = NoteListAdapter()
@@ -120,6 +118,7 @@ class NotesListFragment : Fragment() {
         setupSwipeListener(binding.rvNotesList)
     }
 
+    //swipe to delete items
     private fun setupSwipeListener(rvShopList: RecyclerView) {
         val callback = object : ItemTouchHelper.SimpleCallback(
             0,
@@ -143,14 +142,17 @@ class NotesListFragment : Fragment() {
     }
 
     private fun setupClickListener() {
+        //switch to edit
         noteAdapter.onNodeClickListener = {
             launchFragment(it.id)
         }
+        // add note
         binding.buttonAddShopItem.setOnClickListener {
             viewModel.addNote()
         }
     }
 
+    //passing id through navigation
     private fun launchFragment(noteId: Int) {
         findNavController().navigate(
             NotesListFragmentDirections.actionNotesListFragmentToDetailFragment(noteId)
