@@ -1,7 +1,10 @@
 package com.zhytel.myworknote.presentation.fragments
 
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.zhytel.myworknote.databinding.FragmentNotesListBinding
 import com.zhytel.myworknote.presentation.NotesListViewModel
 import com.zhytel.myworknote.presentation.adapters.NoteListAdapter
-import kotlinx.coroutines.delay
 
 
 class NotesListFragment : Fragment() {
@@ -37,27 +39,50 @@ class NotesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-
+        delayProgressbar()
         viewModel = ViewModelProvider(this)[NotesListViewModel::class.java]
         viewModel.noteList.observe(viewLifecycleOwner) {
-            noteAdapter.submitList(it)
+            if (hasConnection(viewModel.getApplication())) {
+                if (it.isNotEmpty()) {
+                    noteAdapter.submitList(it)
+                    binding.textInternet.isVisible = false
+                    binding.textSize.isVisible = false
+                }else{
+                    binding.textSize.isVisible = true
+                }
+            } else {
+                binding.textInternet.isVisible = true
+            }
         }
-//        binding.progressServer.isVisible = false
-        val oneMin = 1000 // 1 minute in milli seconds
+    }
+
+    private fun hasConnection(context: Context): Boolean {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        var wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
+        if (wifiInfo != null && wifiInfo.isConnected) {
+            return true
+        }
+        wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
+        if (wifiInfo != null && wifiInfo.isConnected) {
+            return true
+        }
+        wifiInfo = cm.activeNetworkInfo
+        return wifiInfo != null && wifiInfo.isConnected
+    }
+
+    private fun delayProgressbar() {
+        val oneMin = 1000
         object : CountDownTimer(
             oneMin.toLong(), 100
         ) {
             override fun onTick(millisUntilFinished: Long) {
-
-                //forward progress
                 val finishedSeconds = oneMin - millisUntilFinished
                 val total = (finishedSeconds.toFloat() / oneMin.toFloat() * 50.0).toInt()
                 binding.progressServer.progress = total
-
             }
 
             override fun onFinish() {
-                        binding.progressServer.isVisible = false
+                binding.progressServer.isVisible = false
             }
         }.start()
     }

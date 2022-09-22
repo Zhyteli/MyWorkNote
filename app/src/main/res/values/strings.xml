@@ -6,4 +6,6 @@
     <string name="st_description">Описание</string>
     <string name="Заголовок">Title</string>
     <string name="tx_save">save</string>
+    <string name="st_internet">Нет интернета</string>
+    <string name="st_data">Нет данных</string>
 </resources>

@@ -44,7 +44,6 @@ class DetailViewModel(
         _noteItem.value?.let {
             viewModelScope.launch {
                 val item = it.copy(title = title, description = description, time = currentTime)
-                Log.d("MMM", item.title)
                 delay(5000)
                 editNoteUseCase(item)
                 Toast.makeText(getApplication(), "Сохранено", Toast.LENGTH_LONG).show()

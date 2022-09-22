@@ -31,6 +31,7 @@ class NotesListViewModel(
             deleteNoteUseCase(note)
         }
     }
+
     fun addNote(){
         viewModelScope.launch {
             val currentTime: String = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
