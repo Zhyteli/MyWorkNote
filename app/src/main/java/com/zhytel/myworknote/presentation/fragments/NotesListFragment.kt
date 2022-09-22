@@ -44,7 +44,7 @@ class NotesListFragment : Fragment() {
         delayProgressbar()
         viewModel = ViewModelProvider(this)[NotesListViewModel::class.java]
         viewModel.noteList.observe(viewLifecycleOwner) {
-            checkingData(it)
+            checkingData(it.sortedWith{o1, o2 -> o2.id.compareTo(o1.id)})
         }
     }
 
