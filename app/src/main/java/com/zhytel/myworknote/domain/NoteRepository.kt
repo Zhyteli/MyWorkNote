@@ -5,13 +5,15 @@ import com.zhytel.myworknote.domain.entity.Note
 
 interface NoteRepository {
 
-    fun addNote(note: Note)
+    suspend fun addNote(note: Note)
 
-    fun deleteNote(note: Note)
+    suspend fun deleteNote(note: Note)
 
-    fun editNote(note: Note)
+    suspend fun editNote(note: Note)
 
-    fun getNote(noteId: Int): Note
+    suspend fun getNote(noteId: Int): Note
 
     fun getNoteList():LiveData<List<Note>>
+
+    suspend fun updateNoteTime(note: Note)
 }

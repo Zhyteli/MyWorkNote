@@ -31,6 +31,7 @@
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                android:maxLines="1"
                 tools:text="Заголовок" />
 
             <TextView
@@ -49,6 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textColor="@color/white"
+            android:maxLines="1"
             android:textSize="16sp"
             android:layout_marginTop="5dp"
             tools:text="Описание" />
