@@ -35,4 +35,8 @@ class NoteRepositoryImpl(
     ){
         mapper.mapListDbModelToEntity(it)
     }
+
+    override suspend fun updateNoteTime(note: Note) {
+        noteDao.addNote(mapper.mapEntityToDbModel(note))
+    }
 }

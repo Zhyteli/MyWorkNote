@@ -14,4 +14,6 @@ interface NoteRepository {
     suspend fun getNote(noteId: Int): Note
 
     fun getNoteList():LiveData<List<Note>>
+
+    suspend fun updateNoteTime(note: Note)
 }

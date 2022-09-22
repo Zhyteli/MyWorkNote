@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.zhytel.myworknote.databinding.FragmentNotesListBinding
+import com.zhytel.myworknote.domain.entity.Note
 import com.zhytel.myworknote.presentation.NotesListViewModel
 import com.zhytel.myworknote.presentation.adapters.NoteListAdapter
 
@@ -42,17 +42,24 @@ class NotesListFragment : Fragment() {
         delayProgressbar()
         viewModel = ViewModelProvider(this)[NotesListViewModel::class.java]
         viewModel.noteList.observe(viewLifecycleOwner) {
-            if (hasConnection(viewModel.getApplication())) {
-                if (it.isNotEmpty()) {
-                    noteAdapter.submitList(it)
-                    binding.textInternet.isVisible = false
-                    binding.textSize.isVisible = false
-                }else{
-                    binding.textSize.isVisible = true
+            checkingData(it)
+        }
+    }
+
+    private fun checkingData(note: List<Note>) {
+        if (hasConnection(viewModel.getApplication())) {
+            if (note.isNotEmpty()) {
+                note.forEach {
+                    viewModel.updateTimeInNote(it)
                 }
+                noteAdapter.submitList(note)
+                binding.textInternet.isVisible = false
+                binding.textSize.isVisible = false
             } else {
-                binding.textInternet.isVisible = true
+                binding.textSize.isVisible = true
             }
+        } else {
+            binding.textInternet.isVisible = true
         }
     }
 

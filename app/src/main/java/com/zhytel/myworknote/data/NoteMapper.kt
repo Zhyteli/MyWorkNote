@@ -7,14 +7,16 @@ class NoteMapper {
         id = note.id,
         title = note.title,
         description = note.description,
-        time = note.time
+        time = note.time,
+        day = note.day
     )
 
     fun mapDbModelToEntity(noteDbModel: NoteDbModel) = Note(
         id = noteDbModel.id,
         title = noteDbModel.title,
         description = noteDbModel.description,
-        time = noteDbModel.time
+        time = noteDbModel.time,
+        day = noteDbModel.day
     )
 
     fun mapListDbModelToEntity(list: List<NoteDbModel>) = list.map {
