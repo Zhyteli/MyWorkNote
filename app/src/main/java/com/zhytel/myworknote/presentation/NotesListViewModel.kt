@@ -2,17 +2,20 @@ package com.zhytel.myworknote.presentation
 
 import android.app.Application
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.zhytel.myworknote.data.NoteRepositoryImpl
-import com.zhytel.myworknote.domain.*
+import com.zhytel.myworknote.domain.AddNoteUseCase
+import com.zhytel.myworknote.domain.DeleteNoteUseCase
+import com.zhytel.myworknote.domain.GetNoteListUseCase
+import com.zhytel.myworknote.domain.UpdateTimeUseCase
 import com.zhytel.myworknote.domain.entity.Note
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.List
+
 
 class NotesListViewModel(
     application: Application

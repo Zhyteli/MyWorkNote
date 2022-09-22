@@ -1,5 +1,6 @@
 package com.zhytel.myworknote.presentation.fragments
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
@@ -7,17 +8,19 @@ import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
+import com.zhytel.myworknote.R
 import com.zhytel.myworknote.databinding.FragmentNotesListBinding
 import com.zhytel.myworknote.domain.entity.Note
 import com.zhytel.myworknote.presentation.NotesListViewModel
 import com.zhytel.myworknote.presentation.adapters.NoteListAdapter
-
 
 class NotesListFragment : Fragment() {
 
@@ -44,6 +47,7 @@ class NotesListFragment : Fragment() {
         viewModel.noteList.observe(viewLifecycleOwner) {
             checkingData(it)
         }
+
     }
 
     private fun checkingData(note: List<Note>) {
@@ -52,6 +56,8 @@ class NotesListFragment : Fragment() {
                 note.forEach {
                     viewModel.updateTimeInNote(it)
                 }
+                binding.progressHorizontalServer.max = note.size
+                binding.progressHorizontalServer.progress = note.lastIndex
                 noteAdapter.submitList(note)
                 binding.textInternet.isVisible = false
                 binding.textSize.isVisible = false
@@ -59,7 +65,9 @@ class NotesListFragment : Fragment() {
                 binding.textSize.isVisible = true
             }
         } else {
+            Snackbar.make(binding.root, R.string.st_internet, Snackbar.LENGTH_LONG).show()
             binding.textInternet.isVisible = true
+            binding.progressHorizontalServer.progress = 0
         }
     }
 
